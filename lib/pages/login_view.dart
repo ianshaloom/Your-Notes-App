@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yournotes/pages/signup_view.dart';
 import '../firebase_options.dart';
+import 'Utils';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isEmailVerified = false;
+ /*  final navigatorKey = GlobalKey<NavigatorState>(); */
   late final TextEditingController _email;
   late final TextEditingController _pass;
 
@@ -102,39 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               TextButton(
-                                onPressed: () async {
-                                  final email = _email.text;
-                                  final pass = _pass.text;
-                                  try {
-                                    final userCredential = await FirebaseAuth
-                                        .instance
-                                        .signInWithEmailAndPassword(
-                                            email: email, password: pass);
-                                    print(userCredential);
-                                  } on FirebaseAuthException catch (e) {
-                                    String? errorMessage;
-                                    if (e.code == 'user-not-found') {
-                                      errorMessage = 'User Not Found';
-                                    }
-                                    if (errorMessage != null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          backgroundColor: const Color.fromARGB(
-                                              255, 151, 10, 0),
-                                          content: Text(
-                                            errorMessage,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
-                                },
+                                onPressed: signIn,
                                 child: Text('Login',
                                     style: GoogleFonts.rowdies(
                                       color: Colors.black,
@@ -155,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           TextButton(
                             onPressed: () async {
-                              await Navigator.of(context).pushNamedAndRemoveUntil(
+                              await Navigator.of(context)
+                                  .pushNamedAndRemoveUntil(
                                 '/signup/',
                                 (route) => false,
                               );
@@ -190,5 +162,76 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future checkEmailVerified() async {
+    setState(() {
+      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    });
+    if (isEmailVerified == false) {
+      navigateToEmailVerification();
+    }
+  }
+  /*  Future sendVerificationEmail() async {
+    if(isEmailVerified)
+    try {
+      final user = FirebaseAuth.instance.currentUser!;
+      await user.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      Utils.showSnackBar(context, e.toString());
+    }
+  } */
+
+Future signIn() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: const [
+                CircularProgressIndicator(),
+                SizedBox(width: 16.0),
+                Text('Loging In...'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    try {
+      final email = _email.text.trim();
+      final pass = _pass.text.trim();
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        navigateToEmailVerification();
+        return; // Return here to prevent further navigation
+      }
+
+      navigateToHomePage();
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context).pop(); // Close the dialog
+      Utils.showSnackBar(context, e.code.toString());
+      return;
+    }
+
+    /* navigatorKey.currentState!.popUntil((route) => route.isFirst); */
+  }
+
+  void navigateToHomePage() {
+    Navigator.of(context).pushReplacementNamed('/home/');
+  }
+
+  void navigateToEmailVerification() {
+    Navigator.of(context).pushReplacementNamed('/verify/');
   }
 }

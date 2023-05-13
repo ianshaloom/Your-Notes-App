@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../firebase_options.dart';
 import 'package:yournotes/pages/login_view.dart';
+import 'Utils';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -13,26 +14,36 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final navigatorKey = GlobalKey<NavigatorState>();
   late final TextEditingController _fname;
-  late final TextEditingController _lname;
   late final TextEditingController _email;
   late final TextEditingController _pass;
+  late final TextEditingController _confirmPass;
+
+  // Create a getter to get the enabled status of the TextButton
+  bool get isSignUpButtonEnabled => arePasswordsMatching();
+  bool arePasswordsMatching() {
+    String password = _pass.text.trim();
+    String confirmPassword = _confirmPass.text.trim();
+
+    return password == confirmPassword;
+  }
 
   @override
   void initState() {
     _fname = TextEditingController();
-    _lname = TextEditingController();
     _email = TextEditingController();
     _pass = TextEditingController();
+    _confirmPass = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _fname.dispose();
-    _lname.dispose();
     _email.dispose();
     _pass.dispose();
+    _confirmPass.dispose();
     super.dispose();
   }
 
@@ -94,13 +105,6 @@ class _SignupPageState extends State<SignupPage> {
                                     ),
                                   ),
                                   TextField(
-                                    controller: _lname,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Last Name',
-                                      icon: Icon(Icons.person),
-                                    ),
-                                  ),
-                                  TextField(
                                     controller: _email,
                                     enableSuggestions: false,
                                     autocorrect: false,
@@ -115,10 +119,29 @@ class _SignupPageState extends State<SignupPage> {
                                     enableSuggestions: false,
                                     autocorrect: false,
                                     decoration: const InputDecoration(
-                                        labelText: 'Enter New Password',
-                                        icon: Icon(Icons.lock)),
+                                      labelText: 'New Password',
+                                      icon: Icon(Icons.lock),
+                                    ),
                                     obscureText: true,
-                                  )
+                                    onChanged: (value) {
+                                      setState(
+                                          () {}); // Update the state when the password field changes
+                                    },
+                                  ),
+                                  TextField(
+                                    controller: _confirmPass,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Confirm Password',
+                                      icon: Icon(Icons.lock),
+                                    ),
+                                    obscureText: true,
+                                    onChanged: (value) {
+                                      setState(
+                                          () {}); // Update the state when the confirm password field changes
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
@@ -137,48 +160,16 @@ class _SignupPageState extends State<SignupPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () async {
-                                  final email = _email.text;
-                                  final pass = _pass.text;
-                                  try {
-                                    await FirebaseAuth.instance
-                                        .createUserWithEmailAndPassword(
-                                            email: email, password: pass);
-                                  } on FirebaseAuthException catch (e) {
-                                    String? errorMessage;
-                                    if (e.code == 'email-already-in-use') {
-                                      errorMessage = 'Email Already in Use';
-                                    } else if (e.code == 'weak-password') {
-                                      errorMessage = 'Weak-Password';
-                                    } else if (e.code == 'invalid-email') {
-                                      errorMessage = 'invalid email';
-                                    }
-
-                                    if (errorMessage != null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          backgroundColor: const Color.fromARGB(
-                                              255, 151, 10, 0),
-                                          content: Text(
-                                            errorMessage,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
-                                },
-                                child: Text('Register',
-                                    style: GoogleFonts.rowdies(
-                                      color: Colors.black,
-                                      fontSize: 35,
-                                      //fontWeight: FontWeight.bold
-                                    )),
+                                onPressed:
+                                    isSignUpButtonEnabled ? signUp : null,
+                                child: Text(
+                                  'Register',
+                                  style: GoogleFonts.rowdies(
+                                    color: Colors.black,
+                                    fontSize: 35,
+                                    //fontWeight: FontWeight.bold
+                                  ),
+                                ),
                               )
                             ],
                           ),
@@ -217,5 +208,50 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  Future signUp() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => WillPopScope(
+        // Add a WillPopScope to handle back button press
+        onWillPop: () async => false,
+        child: Dialog(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: const [
+                CircularProgressIndicator(),
+                SizedBox(width: 16.0),
+                Text('Signing Up...'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    try {
+      final email = _email.text.trim();
+      final pass = _pass.text.trim();
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      navigateToEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context).pop(); // Close the dialog
+      Utils.showSnackBar(context, e.code.toString());
+      return;
+    }
+
+    //Navigator.of(context).pop(); // Close the dialog
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+
+  void navigateToEmailVerification() {
+    Navigator.of(context).pushReplacementNamed('/verify/');
   }
 }
