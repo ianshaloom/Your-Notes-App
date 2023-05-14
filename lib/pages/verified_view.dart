@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yournotes/main.dart';
-import 'package:yournotes/pages/Utils';
+import 'package:yournotes/pages/utils.dart';
 
 class VerifiedPage extends StatefulWidget {
   const VerifiedPage({super.key});

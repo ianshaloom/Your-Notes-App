@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:yournotes/pages/signup_view.dart';
-import '../firebase_options.dart';
-import 'Utils';
+import 'package:yournotes/pages/utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,

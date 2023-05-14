@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../firebase_options.dart';
-import 'package:yournotes/pages/login_view.dart';
-import 'Utils';
+import 'package:yournotes/pages/utils.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -19,6 +16,9 @@ class _SignupPageState extends State<SignupPage> {
   late final TextEditingController _email;
   late final TextEditingController _pass;
   late final TextEditingController _confirmPass;
+
+  late final String username;
+  get getUsername => username;
 
   // Create a getter to get the enabled status of the TextButton
   bool get isSignUpButtonEnabled => arePasswordsMatching();
@@ -50,161 +50,166 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/signup_back.jpg'),
-                  fit: BoxFit.cover)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 650,
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/signup_back.jpg'),
+                      fit: BoxFit.cover)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 650,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width - 40,
-                            height: 390,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: const [
-                                BoxShadow(
-                                  blurRadius: 7,
-                                  color: Color(0x33000000),
-                                  offset: Offset(5, 5),
-                                  spreadRadius: 1.5,
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 30, right: 30),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 40,
+                                height: 390,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 7,
+                                      color: Color(0x33000000),
+                                      offset: Offset(5, 5),
+                                      spreadRadius: 1.5,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 30, right: 30),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TextField(
+                                        controller: _fname,
+                                        decoration: const InputDecoration(
+                                          labelText: 'First Name',
+                                          icon: Icon(Icons.person),
+                                        ),
+                                      ),
+                                      TextField(
+                                        controller: _email,
+                                        enableSuggestions: false,
+                                        autocorrect: false,
+                                        keyboardType: TextInputType.emailAddress,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Email Address',
+                                          icon: Icon(Icons.email),
+                                        ),
+                                      ),
+                                      TextField(
+                                        controller: _pass,
+                                        enableSuggestions: false,
+                                        autocorrect: false,
+                                        decoration: const InputDecoration(
+                                          labelText: 'New Password',
+                                          icon: Icon(Icons.lock),
+                                        ),
+                                        obscureText: true,
+                                        onChanged: (value) {
+                                          setState(
+                                              () {}); // Update the state when the password field changes
+                                        },
+                                      ),
+                                      TextField(
+                                        controller: _confirmPass,
+                                        enableSuggestions: false,
+                                        autocorrect: false,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Confirm Password',
+                                          icon: Icon(Icons.lock),
+                                        ),
+                                        obscureText: true,
+                                        onChanged: (value) {
+                                          setState(
+                                              () {}); // Update the state when the confirm password field changes
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              width: 230,
+                              height: 120,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  TextField(
-                                    controller: _fname,
-                                    decoration: const InputDecoration(
-                                      labelText: 'First Name',
-                                      icon: Icon(Icons.person),
+                                  TextButton(
+                                    onPressed:
+                                        isSignUpButtonEnabled ? signUp : null,
+                                    child: Text(
+                                      'Register',
+                                      style: GoogleFonts.rowdies(
+                                        color: Colors.black,
+                                        fontSize: 35,
+                                        //fontWeight: FontWeight.bold
+                                      ),
                                     ),
-                                  ),
-                                  TextField(
-                                    controller: _email,
-                                    enableSuggestions: false,
-                                    autocorrect: false,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Email Address',
-                                      icon: Icon(Icons.email),
-                                    ),
-                                  ),
-                                  TextField(
-                                    controller: _pass,
-                                    enableSuggestions: false,
-                                    autocorrect: false,
-                                    decoration: const InputDecoration(
-                                      labelText: 'New Password',
-                                      icon: Icon(Icons.lock),
-                                    ),
-                                    obscureText: true,
-                                    onChanged: (value) {
-                                      setState(
-                                          () {}); // Update the state when the password field changes
-                                    },
-                                  ),
-                                  TextField(
-                                    controller: _confirmPass,
-                                    enableSuggestions: false,
-                                    autocorrect: false,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Confirm Password',
-                                      icon: Icon(Icons.lock),
-                                    ),
-                                    obscureText: true,
-                                    onChanged: (value) {
-                                      setState(
-                                          () {}); // Update the state when the confirm password field changes
-                                    },
-                                  ),
+                                  )
                                 ],
                               ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                            )
+                          ],
+                        ),
                         SizedBox(
-                          width: 230,
                           height: 120,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed:
-                                    isSignUpButtonEnabled ? signUp : null,
-                                child: Text(
-                                  'Register',
-                                  style: GoogleFonts.rowdies(
-                                    color: Colors.black,
-                                    fontSize: 35,
-                                    //fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              )
+                                onPressed: () async {
+                                  await Navigator.of(context)
+                                      .pushNamedAndRemoveUntil(
+                                    '/login/',
+                                    (route) => false,
+                                  );
+                                },
+                                child: Text('Already registered ? Login Here',
+                                    style: GoogleFonts.rowdies(
+                                      color: const Color.fromARGB(255, 1, 44, 73),
+                                      fontSize: 13,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
                             ],
                           ),
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 120,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              await Navigator.of(context)
-                                  .pushNamedAndRemoveUntil(
-                                '/login/',
-                                (route) => false,
-                              );
-                            },
-                            child: Text('Already registered ? Login Here',
-                                style: GoogleFonts.rowdies(
-                                  color: const Color.fromARGB(255, 1, 44, 73),
-                                  fontSize: 13,
-                                  //fontWeight: FontWeight.bold
-                                )),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -220,8 +225,8 @@ class _SignupPageState extends State<SignupPage> {
         child: Dialog(
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 CircularProgressIndicator(),
                 SizedBox(width: 16.0),
                 Text('Signing Up...'),
@@ -233,6 +238,7 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     try {
+      username = _fname.text.trim();
       final email = _email.text.trim();
       final pass = _pass.text.trim();
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -254,4 +260,9 @@ class _SignupPageState extends State<SignupPage> {
   void navigateToEmailVerification() {
     Navigator.of(context).pushReplacementNamed('/verify/');
   }
+}
+
+
+class SignUpPageClass{
+  var userName = _SignupPageState().getUsername;
 }
