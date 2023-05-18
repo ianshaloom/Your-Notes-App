@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:yournotes/widgets/all_notes.dart';
+import 'package:yournotes/widgets/bookmark.dart';
+import 'package:yournotes/widgets/recent_widget.dart';
+import 'package:yournotes/widgets/to_do_list.dart';
 
 class NotesHomePage extends StatefulWidget {
   const NotesHomePage({super.key});
@@ -10,6 +14,13 @@ class NotesHomePage extends StatefulWidget {
 
 class _NotesHomePageState extends State<NotesHomePage> {
   final navigatorKey = GlobalKey<NavigatorState>();
+  List<Widget> widgets = [
+    const Recents(),
+    const AllNotes(),
+    const Bookmark(),
+    const TodoLists()
+  ];
+  late int widgetIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +63,6 @@ class _NotesHomePageState extends State<NotesHomePage> {
                       bottom: 90,
                       child: IconButton(
                         onPressed: () {
-                          /* navigatorKey.currentState!
-                              .popUntil((route) => route.isFirst); */
                           Navigator.of(context)
                               .pushReplacementNamed('/profile/');
                         },
@@ -68,57 +77,40 @@ class _NotesHomePageState extends State<NotesHomePage> {
           const SizedBox(height: 10),
           Expanded(
             flex: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildInfoCard('All Notes'),
-                _buildInfoCard('Favourites'),
-                _buildInfoCard('To-Do List'),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: SizedBox(
+                height: 30,
+                child: ListView(
+                  padding: const EdgeInsets.all(0),
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    _buildInfoCard('Recents', 0),
+                    const SizedBox(width: 10.0),
+                    _buildInfoCard('All Notes', 1),
+                    const SizedBox(width: 10.0),
+                    _buildInfoCard('Bookmarks', 2),
+                    const SizedBox(width: 10.0),
+                    _buildInfoCard('To-Do List', 3),
+                  ],
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 10),
           Expanded(
             flex: 1,
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(0, 199, 0, 0),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
-              child: ListView(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15.0, left: 15, right: 15),
-                    child: _buildRecentNote(),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15.0, left: 15, right: 15),
-                    child: _buildRecentNote(),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15.0, left: 15, right: 15),
-                    child: _buildRecentNote(),
-                  ),
-                ],
-              ),
-            ),
+            child: widgets[widgetIndex],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoCard(String cardTitle) {
+  Widget _buildInfoCard(String cardTitle, int i) {
     return InkWell(
       onTap: () {
-        selectCard(cardTitle);
+        selectCard(cardTitle, i);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
@@ -130,26 +122,28 @@ class _NotesHomePageState extends State<NotesHomePage> {
               : Colors.transparent,
           border: Border.all(
               color: cardTitle == selectedCard
-                  ? Colors.transparent
-                  : Color.fromARGB(255, 240, 134, 41).withOpacity(0.3),
+                  ? const Color.fromARGB(204, 0, 0, 0)
+                  : const Color.fromARGB(255, 230, 114, 13).withOpacity(0.5),
               style: BorderStyle.solid,
               width: 0.75),
         ),
-        height: 35.0,
-        width: 130.0,
+        height: 30.0,
+        width: 120.0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 15.0),
-              child: Text(cardTitle,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: cardTitle == selectedCard
-                        ? Colors.black
-                        : Colors.grey.withOpacity(0.7),
-                  )),
+              padding: const EdgeInsets.only(top: 3.0, left: 15.0),
+              child: Text(
+                cardTitle,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: cardTitle == selectedCard
+                      ? Colors.black
+                      : Colors.grey.withOpacity(0.7),
+                ),
+              ),
             ),
           ],
         ),
@@ -157,93 +151,12 @@ class _NotesHomePageState extends State<NotesHomePage> {
     );
   }
 
-  selectCard(cardTitle) {
+  selectCard(cardTitle, i) {
     setState(() {
       selectedCard = cardTitle;
+      widgetIndex = i;
     });
   }
-}
-
-Widget _buildRecentNote() {
-  return SizedBox(
-    child: Column(
-      children: [
-        Container(
-          width: 400,
-          height: 230,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromRGBO(17, 17, 17, 0.3),
-                Color.fromRGBO(199, 235, 179, 0.8),
-              ],
-            ),
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(50.0),
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 295,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(199, 235, 179, 0.8),
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(30.0),
-                  bottomLeft: Radius.circular(30.0),
-                ),
-              ),
-            ),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(60, 170, 0, 0),
-              ),
-              child: Stack(
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                      color: Color.fromRGBO(199, 235, 179, 0.8),
-                    ),
-                  ),
-                  Positioned(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 244, 236),
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(50.0),
-                          topLeft: Radius.circular(50.0),
-                          topRight: Radius.circular(30.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    bottom: 20,
-                    child: FloatingActionButton(
-                      onPressed: () {},
-                      child: const Icon(Icons.arrow_outward_outlined),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        )
-      ],
-    ),
-  );
 }
 
 //Global Members

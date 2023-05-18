@@ -65,7 +65,7 @@ class _VerifiedPageState extends State<VerifiedPage> {
 
   @override
   Widget build(BuildContext context) => isEmailVerified
-      ? const HomePage()
+      ? const MainPage()
       : Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(20.0),

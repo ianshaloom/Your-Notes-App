@@ -19,7 +19,7 @@ class Greetings {
     final currentHour = currentTime.hour;
 
     if (currentHour < 12) {
-      _greeting = 'Gooor Morning';
+      _greeting = 'Good Morning';
     } else if (currentHour < 17) {
       _greeting = 'Good Afternoon';
     } else {

@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:yournotes/firebase_options.dart';
+import 'package:yournotes/pages/home_page.dart';
 import 'package:yournotes/pages/notes_main_view.dart';
 import 'package:yournotes/pages/routes.dart';
-import 'package:yournotes/pages/signup_view.dart';
+import 'package:yournotes/pages/test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,31 +21,36 @@ void main() async {
       ),
       useMaterial3: true,
     ),
-    home: const HomePage(),
+    home: const NotesHomePage(),
     routes: routess,
   ));
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        
         final user = FirebaseAuth.instance.currentUser;
         if (snapshot.hasData) {
           print(user);
           return const NotesHomePage();
         } else {
           print(user);
-          return const SignupPage();
+          return const HomePage();
         }
-        
       },
     );
+  }
+}
+
+//Global Members
+late BuildContext appContext;
+
+
     /* return FutureBuilder(
       future: Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -68,10 +74,3 @@ class HomePage extends StatelessWidget {
         }
       },
     ); */
-  }
-}
-
-
-
-//Global Members
-late BuildContext appContext;

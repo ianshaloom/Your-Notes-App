@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:yournotes/pages/signup_view.dart';
-import 'package:yournotes/pages/utils.dart';
 import 'package:yournotes/pages/utils.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,7 +13,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late final _greeting = Greetings().greeting;
-  late final _username = SignUpPageClass().userName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,29 +52,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(bottom: 0.0),
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color.fromARGB(255, 255, 197, 197),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 4.0,
-                                        color: Color(0x33000000),
-                                        offset: Offset(0, 5))
-                                  ],
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/avatar.jpg'),
-                                      fit: BoxFit.cover)),
-                              height: 225.0,
-                              width: 225.0,
-                            ),
-                          ],
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color.fromARGB(255, 255, 197, 197),
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 4.0,
+                                    color: Color(0x33000000),
+                                    offset: Offset(0, 5))
+                              ],
+                              image: DecorationImage(
+                                  image: AssetImage('assets/images/avatar.jpg'),
+                                  fit: BoxFit.cover)),
+                          height: 225.0,
+                          width: 225.0,
                         ),
                       ),
                       Padding(
@@ -94,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             Text(
-                              "$_greeting, $_username",
+                              "$_greeting, ${Profile().getUsername}",
                               style: GoogleFonts.marcellus(
                                 fontSize: 30,
                               ),
@@ -425,10 +418,16 @@ class _ProfilePageState extends State<ProfilePage> {
         })) {
       case 'Yes':
         FirebaseAuth.instance.signOut();
-        Navigator.of(context).pushReplacementNamed('/login/');
+        Navigator.of(context).pushReplacementNamed('/main/');
         break;
       case 'No':
         break;
     }
   }
+}
+
+class Profile {
+  late String username = 'User';
+  set setUsername(String username) => this.username = username;
+  get getUsername => username;
 }
