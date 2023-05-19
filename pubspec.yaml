@@ -41,6 +41,8 @@ dependencies:
   cloud_firestore: ^4.6.0
   google_fonts: ^4.0.4
   email_validator: ^2.1.17
+  flutter_slidable: ^3.0.0
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:

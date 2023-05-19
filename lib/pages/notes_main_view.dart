@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:yournotes/widgets/all_notes.dart';
-import 'package:yournotes/widgets/bookmark.dart';
+import 'package:yournotes/widgets/favourites.dart';
 import 'package:yournotes/widgets/recent_widget.dart';
 import 'package:yournotes/widgets/to_do_list.dart';
 
@@ -14,13 +15,23 @@ class NotesHomePage extends StatefulWidget {
 
 class _NotesHomePageState extends State<NotesHomePage> {
   final navigatorKey = GlobalKey<NavigatorState>();
-  List<Widget> widgets = [
-    const Recents(),
-    const AllNotes(),
-    const Bookmark(),
-    const TodoLists()
+  List<String> pageNames = [
+    'Recents',
+    'All Notes',
+    'Favourites',
+    'ToDo List',
   ];
+  String pageName = 'Recents';
   late int widgetIndex = 0;
+  final _controller = PageController();
+
+  // Set page name
+  void setPageName(int value) {
+    setState(() {
+      pageName = pageNames[value];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,17 +92,28 @@ class _NotesHomePageState extends State<NotesHomePage> {
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: SizedBox(
                 height: 30,
-                child: ListView(
-                  padding: const EdgeInsets.all(0),
-                  scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildInfoCard('Recents', 0),
-                    const SizedBox(width: 10.0),
-                    _buildInfoCard('All Notes', 1),
-                    const SizedBox(width: 10.0),
-                    _buildInfoCard('Bookmarks', 2),
-                    const SizedBox(width: 10.0),
-                    _buildInfoCard('To-Do List', 3),
+                    Text(
+                      pageName,
+                      style: GoogleFonts.shadowsIntoLightTwo(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    SmoothPageIndicator(
+                      controller: _controller,
+                      count: 4,
+                      effect: const ExpandingDotsEffect(
+                        dotWidth: 20,
+                        activeDotColor: Color.fromARGB(255, 244, 223, 205),
+                        dotColor: Color.fromRGBO(199, 235, 179, 0.856),
+                        spacing: 2,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -100,64 +122,21 @@ class _NotesHomePageState extends State<NotesHomePage> {
           const SizedBox(height: 10),
           Expanded(
             flex: 1,
-            child: widgets[widgetIndex],
+            child: SizedBox(
+              child: PageView(
+                controller: _controller,
+                onPageChanged: ((value) => setPageName(value)),
+                children: const [
+                  Recents(),
+                  AllNotes(),
+                  Bookmark(),
+                  TodoLists(),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
-
-  Widget _buildInfoCard(String cardTitle, int i) {
-    return InkWell(
-      onTap: () {
-        selectCard(cardTitle, i);
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeIn,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.0),
-          color: cardTitle == selectedCard
-              ? const Color.fromRGBO(199, 235, 179, 0.8)
-              : Colors.transparent,
-          border: Border.all(
-              color: cardTitle == selectedCard
-                  ? const Color.fromARGB(204, 0, 0, 0)
-                  : const Color.fromARGB(255, 230, 114, 13).withOpacity(0.5),
-              style: BorderStyle.solid,
-              width: 0.75),
-        ),
-        height: 30.0,
-        width: 120.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 3.0, left: 15.0),
-              child: Text(
-                cardTitle,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: cardTitle == selectedCard
-                      ? Colors.black
-                      : Colors.grey.withOpacity(0.7),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  selectCard(cardTitle, i) {
-    setState(() {
-      selectedCard = cardTitle;
-      widgetIndex = i;
-    });
-  }
 }
-
-//Global Members
-var selectedCard = 'WEIGHT';

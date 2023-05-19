@@ -145,7 +145,7 @@ class _AllNotesState extends State<AllNotes> {
                     backgroundColor: Colors.black,
                     onPressed: () {},
                     child: const Icon(
-                      Icons.bookmark_add_outlined,
+                      Icons.favorite_outline_sharp,
                       size: 30,
                       color: Colors.white,
                     ),

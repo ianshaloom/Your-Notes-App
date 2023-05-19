@@ -5,7 +5,6 @@ import 'package:yournotes/firebase_options.dart';
 import 'package:yournotes/pages/home_page.dart';
 import 'package:yournotes/pages/notes_main_view.dart';
 import 'package:yournotes/pages/routes.dart';
-import 'package:yournotes/pages/test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -73,7 +73,7 @@ class _RecentNoteState extends State<RecentNote> {
                     backgroundColor: Colors.black,
                     onPressed: () {},
                     child: const Icon(
-                      Icons.bookmark_add_outlined,
+                      Icons.favorite_border_outlined,
                       size: 30,
                       color: Colors.white,
                     ),

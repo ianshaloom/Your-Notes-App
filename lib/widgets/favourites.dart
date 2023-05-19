@@ -84,7 +84,7 @@ class _BookmarkState extends State<Bookmark> {
         height: 300,
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
-          //color: Color.fromRGBO(0, 0, 0, 0.199),
+          color: Color.fromRGBO(0, 0, 0, 0.199),
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(50),
             bottomRight: Radius.circular(50),
@@ -141,7 +141,7 @@ class _BookmarkState extends State<Bookmark> {
                     backgroundColor: Colors.transparent,
                     onPressed: () {},
                     child: const Icon(
-                      Icons.bookmark,
+                      Icons.favorite,
                       size: 30,
                       color: Color.fromARGB(255, 250, 204, 170),
                     ),
