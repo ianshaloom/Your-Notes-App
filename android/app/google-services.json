@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "629521207385",
-    "project_id": "yournotes-flutter-app",
-    "storage_bucket": "yournotes-flutter-app.appspot.com"
+    "project_number": "260847709910",
+    "project_id": "yournotes-e6313",
+    "storage_bucket": "yournotes-e6313.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:629521207385:android:dc9ec92178722e2d82e148",
+        "mobilesdk_app_id": "1:260847709910:android:ce036fd9fe582eb071e377",
         "android_client_info": {
           "package_name": "com.moemanii.yournotes"
         }
       },
       "oauth_client": [
         {
-          "client_id": "629521207385-mnfflh21o8vnarrrs7trer7hfui0ctan.apps.googleusercontent.com",
+          "client_id": "260847709910-b0t0467hqf8bpqcf6ellctrq7q8d9bak.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBvfcclbuWu82XlsPi5Xd8ih56iItUjyyY"
+          "current_key": "AIzaSyB1G--y9U1w-62sNyKvPl8g6cyDH3wOr2c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "629521207385-mnfflh21o8vnarrrs7trer7hfui0ctan.apps.googleusercontent.com",
+              "client_id": "260847709910-b0t0467hqf8bpqcf6ellctrq7q8d9bak.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "260847709910-jv6drh72qgkjtinoaka15p4p5m5g1aa7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.moemanii.yournotes"
+              }
             }
           ]
         }

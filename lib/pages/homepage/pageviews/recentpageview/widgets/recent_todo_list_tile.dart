@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:yournotes/utils/add_task_dialogbox.dart';
 import 'package:yournotes/widgets/todo_tile.dart';
 
-class RecentTodo extends StatefulWidget {
-  const RecentTodo({super.key});
+class RecentTodoListTile extends StatefulWidget {
+  const RecentTodoListTile({super.key});
 
   @override
-  State<RecentTodo> createState() => _RecentTodoState();
+  State<RecentTodoListTile> createState() => _RecentTodoListTileState();
 }
-// list of to do tasks
-  List toDoList = [
-    ['Learn a new Widget', false],
-    ['Pick up new friends', false],
-  ];
-class _RecentTodoState extends State<RecentTodo> {
-  
 
+// list of to do tasks
+List toDoList = [
+  ['Learn a new Widget', false],
+  ['Pick up new friends', false],
+];
+
+class _RecentTodoListTileState extends State<RecentTodoListTile> {
   // text controller
   final _controller = TextEditingController();
 
@@ -52,29 +52,28 @@ class _RecentTodoState extends State<RecentTodo> {
   // checkbox tapped
   void checkboxChanged(bool? value, int index) {
     setState(() {
-      toDoList[index][1] = !toDoList[index][1];
+      toDoList[index][1] = value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 30.0, right: 30.0, top: 20, bottom: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
       child: SizedBox(
-        height: 500,
+        //height: ,
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
             Container(
-              height: 500,
+              //height: ,
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 244, 223, 205),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                   bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(220),
+                  bottomRight: Radius.circular(20),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -85,7 +84,7 @@ class _RecentTodoState extends State<RecentTodo> {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 40.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: ListView.builder(
                   padding: const EdgeInsets.all(0),
                   itemCount: toDoList.length,
@@ -101,13 +100,13 @@ class _RecentTodoState extends State<RecentTodo> {
               ),
             ),
             Positioned(
-              bottom: 0,
-              right: 0,
+              bottom: 5,
+              right: 5,
               child: Container(
                 height: 70,
                 width: 70,
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(123, 131, 131, 131),
+                  color: Color.fromARGB(255, 255, 244, 236),
                   borderRadius: BorderRadius.all(
                     Radius.circular(40),
                   ),
@@ -118,7 +117,9 @@ class _RecentTodoState extends State<RecentTodo> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FloatingActionButton(
+                          heroTag: null,
                           onPressed: createNewTask,
+                          elevation: 0,
                           shape: const CircleBorder(),
                           backgroundColor: Colors.black,
                           child: const Icon(

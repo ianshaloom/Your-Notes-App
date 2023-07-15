@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:yournotes/pages/utils.dart';
+import 'package:yournotes/utils/utils.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginWidget extends StatefulWidget {
+  const LoginWidget({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginWidget> createState() => _LoginWidgetState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginWidgetState extends State<LoginWidget> {
   bool isEmailVerified = false;
-  /*  final navigatorKey = GlobalKey<NavigatorState>(); */
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -48,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                top: 25,
+                top: 15,
                 left: 10,
                 right: 10,
               ),
@@ -69,11 +68,12 @@ class _LoginPageState extends State<LoginPage> {
                     style: const TextStyle(
                       fontSize: 17,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
                       border: InputBorder.none,
                       hintText: 'Email Address',
-                      icon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(
+                      icon: const Icon(Icons.email),
+                      contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 12.0),
                     ),
                     onChanged: (value) {
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                top: 25,
+                top: 5,
                 left: 10,
                 right: 10,
               ),
@@ -117,11 +117,12 @@ class _LoginPageState extends State<LoginPage> {
                     style: const TextStyle(
                       fontSize: 17,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
                       border: InputBorder.none,
                       hintText: 'Password',
-                      icon: Icon(Icons.lock),
-                      contentPadding: EdgeInsets.symmetric(
+                      icon: const Icon(Icons.lock),
+                      contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 12.0),
                     ),
                     onChanged: (value) {
@@ -178,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: _navigateToPasswordReset,
                     child: Text(
                       'Reset',
                       style: GoogleFonts.montserrat(
@@ -195,26 +196,45 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.only(
                   top: 30, left: 30, right: 30, bottom: 10),
               child: Container(
-                height: 55,
-                width: 300,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                  height: 55,
+                  width: 300,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
-                ),
-                child: ElevatedButton(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 199, 235, 179),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (EmailValidator.validate(
+                              _emailController.text.trim()) &&
+                          _passwordController.text.trim().isNotEmpty &&
+                          _passwordController.text.trim().length > 6) {
+                        signIn();
+                      } else {
+                        Utils.showSnackBar(
+                            context, 'Please Validate Your Credentials');
+                      }
+                    },
+                    child: Text(
+                      'Login Now',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 23,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ) /* ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor:
                           const Color.fromARGB(255, 199, 235, 179)),
                   onPressed: () {
-                    if (EmailValidator.validate(_emailController.text.trim()) &&
-                        _passwordController.text.trim().isNotEmpty &&
-                        _passwordController.text.trim().length > 6) {
-                      signIn();
-                    }else {
-                      Utils.showSnackBar(
-                          context, 'Please Validate Your Credentials');
-                    }
+                    
                   },
                   child: Text(
                     'Login Now',
@@ -224,8 +244,8 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.black,
                     ),
                   ),
-                ),
-              ),
+                ), */
+                  ),
             )
           ],
         ),
@@ -238,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     });
     if (isEmailVerified == false) {
-      navigateToEmailVerification();
+      _navigateToEmailVerification();
     }
   }
 
@@ -273,26 +293,33 @@ class _LoginPageState extends State<LoginPage> {
 
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null && !user.emailVerified) {
-        navigateToEmailVerification();
+        _navigateToEmailVerification();
         return; // Return here to prevent further navigation
       }
 
-      navigateToHomePage();
+      _navigateToHomePage();
     } on FirebaseAuthException catch (e) {
       Navigator.of(context).pop(); // Close the dialog
       Utils.showSnackBar(context, e.code.toString());
       return;
     }
-
-    /* navigatorKey.currentState!.popUntil((route) => route.isFirst); */
   }
 
-  void navigateToHomePage() {
-    Navigator.of(context).pushReplacementNamed('/home/');
+  // Navigations
+  void _navigateToHomePage() {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/home/',
+      (route) => false,
+    );
   }
 
-  void navigateToEmailVerification() {
-    Navigator.of(context).pushReplacementNamed('/verify/');
+  void _navigateToEmailVerification() {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushNamed('/verify/');
   }
 
+  void _navigateToPasswordReset() {
+    Navigator.of(context).pushNamed('/reset/');
+  }
 }
