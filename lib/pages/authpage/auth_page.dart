@@ -12,9 +12,9 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-    final PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   bool showLoginPage = true;
-   int _pageIndex = 0;
+  int _pageIndex = 0;
 
   void _setLoginPage() {
     setState(() {
@@ -35,18 +35,16 @@ class _AuthPageState extends State<AuthPage> {
       );
     });
   }
-  
+
   void newPageIndex(int value) {
     setState(() {
       _pageIndex = value;
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 244, 236),
       body: Stack(fit: StackFit.expand, children: [
         Positioned(
           top: 50,
@@ -67,7 +65,7 @@ class _AuthPageState extends State<AuthPage> {
         ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-           Container(
+            Container(
               margin: const EdgeInsets.only(left: 20),
               height: 180,
               child: _pageIndex == 0 ? _buildPad1() : _buildPad2(),

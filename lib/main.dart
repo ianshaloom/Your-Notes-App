@@ -4,31 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'pages/authpage/auth_page.dart';
-import 'pages/homepage/notes_home_page.dart';
+import 'pages/noteshomepage/notes_home_page.dart';
 import 'utils/routes.dart';
 
- main() async {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    //options: DefaultFirebaseOptions.currentPlatform,
-  );
+      //options: DefaultFirebaseOptions.currentPlatform,
+      );
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Your Notes',
       theme: ThemeData(
+        primaryColor: const Color(0xff7D91FA),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 255, 213, 248),
+          seedColor: const Color(0xff7D91FA),
         ),
         useMaterial3: true,
+
+        // Scaffold
+        scaffoldBackgroundColor: const Color(0xffFFFFFF),
+        
+        // AppBar
         appBarTheme: const AppBarTheme(
-         backgroundColor:  Color.fromARGB(255, 255, 244, 236),
-         centerTitle: true,
-         elevation: 0,
-         scrolledUnderElevation: 0,
-         
+          backgroundColor: Color(0xffFFFFFF),
+          centerTitle: true,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          
         ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 244, 236),
+        
+        // Text
         textTheme: TextTheme(
           labelSmall: GoogleFonts.montserrat(
             fontSize: 15,
@@ -36,6 +43,7 @@ import 'utils/routes.dart';
             color: Colors.black,
           ),
         ),
+        
         // Bottom Sheet Theme
         bottomSheetTheme: const BottomSheetThemeData(
           modalElevation: 1,
@@ -46,10 +54,22 @@ import 'utils/routes.dart';
               top: Radius.circular(20.0),
             ),
             side: BorderSide(
-              color:  Color.fromARGB(255, 199, 235, 179),
+              color: Color.fromARGB(255, 199, 235, 179),
             ),
           ),
         ),
+        
+        //Card
+        cardTheme: CardTheme(
+          elevation: 1,
+          shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            color: const Color(0xffFFFFFF),
+        ),
+        
+        // Container
+        
+        
       ),
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
