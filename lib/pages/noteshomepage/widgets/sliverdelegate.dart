@@ -59,7 +59,7 @@ class MyPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                       width: 20,
                     ),
                     Icon(
-                      Icons.ios_share_rounded,
+                      Icons.grid_3x3,
                     ),
                   ],
                 )

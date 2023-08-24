@@ -99,7 +99,6 @@ class NotePage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     note,
-                    maxLines: 4,
                     style: GoogleFonts.hubballi(
                       color: const Color(0xff000000),
                       fontSize: 16,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yournotes/pages/dialogs/note_view_dialog.dart';
 
 import '../../models/note.dart';
 import '../../widgets/disable_list_glow.dart';
@@ -66,8 +67,15 @@ class _NotesHomePageState extends State<NotesHomePage> {
                   itemExtent: 150,
                   children: [
                     ...notes
-                        .map((e) => NoteTile(
-                            title: e.title, date: e.date, note: e.note))
+                        .map(
+                          (e) => NoteTile(
+                            title: e.title,
+                            date: e.date,
+                            note: e.note,
+                            openNote: _openNote,
+                            e: e,
+                          ),
+                        )
                         .toList(),
                   ],
                 ),
@@ -77,7 +85,7 @@ class _NotesHomePageState extends State<NotesHomePage> {
           ),
         );
       }),
-      drawer: NavigationnDrawer(),
+      drawer: const NavigationnDrawer(),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () => _openDrawer,
         child: const Icon(CupertinoIcons.pencil),
@@ -85,12 +93,26 @@ class _NotesHomePageState extends State<NotesHomePage> {
     );
   }
 
+  Future _openNote(BuildContext context, Note e) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return NoteDialog(
+          e: e,
+        );
+      },
+    );
+  }
+
   final List<Note> notes = [
     Note(
-        title: 'A Song For Easter',
+        title: 'Product Management',
         date: DateTime.now(),
         note:
-            "Lack of Record Keeping: Many youth entrepreneurs in Kenya do not keep proper records of their sales, purchases, and orders. This leads to disorganized business operations, difficulty in tracking transactions, and potential loss of crucial financial data."),
+            """Product management is a strategic role within a company that involves overseeing the development and management of a product or suite of products throughout their lifecycle. The primary goal of a product manager is to create and deliver products that meet customer needs, align with business objectives, and generate value for the organization.
+Market research and analysis: Product managers conduct market research to understand customer needs, preferences, and trends. They analyze market data and competitive landscape to identify opportunities and make informed product decisions.
+Product strategy: Product managers define the product vision, goals, and strategy based on market research and business objectivesI. Inefficient Expense Tracking: Without an effective system for tracking expenses, young business owners may struggle to monitor their business costs accurately.
+This can lead to overspending, financial instability, and difficulty in identifying areas for cost-cutting."""),
     Note(
         title: 'Tommorrows ToDo List',
         date: DateTime.now(),

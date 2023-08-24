@@ -2,23 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/note.dart';
 import '../../notepage/note_view.dart';
 
 class NoteTile extends StatelessWidget {
   final String title;
   final DateTime date;
   final String note;
+  final Function openNote;
+  final Note e;
 
   const NoteTile(
-      {super.key, required this.title, required this.date, required this.note});
+      {super.key,
+      required this.title,
+      required this.date,
+      required this.note,
+      required this.openNote,
+      required this.e});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                NotePage(noteTitle: title, date: date, note: note)));
+      onTap: () => openNote(context, e),
+      onDoubleTap: () {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  NotePage(noteTitle: e.title, date: e.date, note: e.note),
+            ),
+            (route) => route.isFirst);
       },
       child: Hero(
         tag: note,
