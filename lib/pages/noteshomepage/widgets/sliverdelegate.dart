@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
@@ -17,7 +18,7 @@ class MyPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       color: Theme.of(context).scaffoldBackgroundColor,
       alignment: Alignment.center,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.only(left: 15, right: 15, bottom: 5),
         child: Column(
           children: [
             SizedBox(
@@ -46,20 +47,30 @@ class MyPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               children: [
                 GestureDetector(
                   onTap: () => onTap(context),
-                  child: const Icon(
-                    Icons.menu_rounded,
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: SvgPicture.asset("assets/icons/menu.svg"),
                   ),
                 ),
-                const Row(
+                Row(
                   children: [
-                    Icon(
-                      Icons.search,
+                    GestureDetector(
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: SvgPicture.asset("assets/icons/search.svg"),
+                      ),
                     ),
                     SizedBox(
                       width: 20,
                     ),
-                    Icon(
-                      Icons.grid_3x3,
+                    GestureDetector(
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: SvgPicture.asset("assets/icons/grid.svg"),
+                      ),
                     ),
                   ],
                 )

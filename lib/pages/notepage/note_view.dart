@@ -20,53 +20,12 @@ class NotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    //final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xffFFFFFF),
       appBar: AppBar(
         toolbarHeight: 10,
       ),
-      /* appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        backgroundColor: const Color(0xffFFFFFF),
-        leading: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: const Icon(
-            CupertinoIcons.back,
-            color: Colors.black,
-          ),
-        ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.copy,
-              color: Colors.black,
-              size: 30,
-            ) /* SvgPicture.asset(
-              'assets/images/copy.svg',
-              height: 25,
-            ) */
-            ,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Icon(
-              Icons.folder_open_rounded,
-              color: Colors.black,
-              size: 30,
-            ),
-          )
-        ],
-        /* title: Text(
-          'Notes',
-          style: GoogleFonts.montserrat(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xff000000)),
-        ), */
-      ), */
       body: Stack(
         //alignment: Alignment.center,
         children: [

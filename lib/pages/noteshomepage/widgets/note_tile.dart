@@ -77,6 +77,7 @@ class NoteTile extends StatelessWidget {
                     child: Text(
                       note,
                       maxLines: 4,
+                      textAlign: TextAlign.justify,
                       style: GoogleFonts.hubballi(
                         color: const Color(0xff000000),
                         fontSize: 14,

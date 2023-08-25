@@ -55,8 +55,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
                 delegate: MyPersistentHeaderDelegate(
                   notes.length,
                   onTap: _openDrawer,
-                  minHeight: 85,
-                  maxHeight: 85,
+                  minHeight: 90,
+                  maxHeight: 90,
                 ),
                 pinned: true,
               ),
@@ -87,7 +87,7 @@ class _NotesHomePageState extends State<NotesHomePage> {
       }),
       drawer: const NavigationnDrawer(),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () => _openDrawer,
+        onPressed: () => Navigator.pushNamed(context, '/home/newnote'),
         child: const Icon(CupertinoIcons.pencil),
       ),
     );
