@@ -112,6 +112,10 @@ class _NotesHomePageState extends State<NotesHomePage> {
             """Product management is a strategic role within a company that involves overseeing the development and management of a product or suite of products throughout their lifecycle. The primary goal of a product manager is to create and deliver products that meet customer needs, align with business objectives, and generate value for the organization.
 Market research and analysis: Product managers conduct market research to understand customer needs, preferences, and trends. They analyze market data and competitive landscape to identify opportunities and make informed product decisions.
 Product strategy: Product managers define the product vision, goals, and strategy based on market research and business objectivesI. Inefficient Expense Tracking: Without an effective system for tracking expenses, young business owners may struggle to monitor their business costs accurately.
+This can lead to overspending, financial instability, and difficulty in identifying areas for cost-cutting.\n\n
+Product management is a strategic role within a company that involves overseeing the development and management of a product or suite of products throughout their lifecycle. The primary goal of a product manager is to create and deliver products that meet customer needs, align with business objectives, and generate value for the organization.
+Market research and analysis: Product managers conduct market research to understand customer needs, preferences, and trends. They analyze market data and competitive landscape to identify opportunities and make informed product decisions.
+Product strategy: Product managers define the product vision, goals, and strategy based on market research and business objectivesI. Inefficient Expense Tracking: Without an effective system for tracking expenses, young business owners may struggle to monitor their business costs accurately.
 This can lead to overspending, financial instability, and difficulty in identifying areas for cost-cutting."""),
     Note(
         title: 'Tommorrows ToDo List',
